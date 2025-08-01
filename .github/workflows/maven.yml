@@ -27,8 +27,14 @@ jobs:
         java-version: '21'
         distribution: 'temurin'
         cache: maven
+    - name: Install Xvfb
+      run: sudo apt-get install -y xvfb
+
     - name: Build with Maven
-      run: mvn -B package --file pom.xml
+      run: |
+        export DISPLAY=:99
+        Xvfb :99 -screen 0 1024x768x16 &
+        mvn -B package --file pom.xml
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     - name: Update dependency graph
